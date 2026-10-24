@@ -1,6 +1,6 @@
 # SwiftDrop
 
-Download the [Android test APK ZIP and source ZIP](downloads/README.md). Extract the Android ZIP before installing the APK.
+Download the [Android test APK ZIP and source ZIP](https://github.com/wwwadeesaushen7/SwiftDrop/tree/main/downloads). Extract the Android ZIP before installing the APK.
 
 Private local file sharing in Flutter/Dart, with Android and Windows as the first targets.
 No cloud storage or account service. Devices must be able to reach each other on a trusted LAN/hotspot.
