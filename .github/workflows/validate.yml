@@ -1,0 +1,61 @@
+name: Validate SwiftDrop
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.8'
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - run: dart format --output=none --set-exit-if-changed lib test integration_test tool
+      - run: flutter analyze
+      - run: flutter test --dart-define=SWIFTDROP_TEST=true --reporter expanded
+  android:
+    needs: tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.8'
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - run: flutter build apk --debug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SwiftDrop-Android-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk
+  windows:
+    needs: tests
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.8'
+          channel: stable
+          cache: true
+      - run: flutter config --enable-windows-desktop
+      - run: flutter pub get --enforce-lockfile
+      - run: flutter test --dart-define=SWIFTDROP_TEST=true --reporter expanded
+      - run: flutter build windows --release
+      - name: Package installer
+        shell: pwsh
+        run: '& "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" packaging\swiftdrop.iss'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SwiftDrop-Windows
+          path: |
+            build/windows/x64/runner/Release/**
+            build/installer/*.exe

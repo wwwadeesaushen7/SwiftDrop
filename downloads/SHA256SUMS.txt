@@ -1,0 +1,2 @@
+d1580e15eac2104c219a09f41b40ea34dc14c4543c7d8f0dea6336eaf8c9a92d  SwiftDrop-0.1.0-android-debug.zip
+c2528605bb1185d2feaf43dc0064375adf8aa5dc4b170117d719be54c10b327a  SwiftDrop-source.zip
