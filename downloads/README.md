@@ -1,9 +1,36 @@
-# SwiftDrop downloads
+# Download SwiftDrop directly
 
-- [Android debug APK ZIP](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.1.0-android-debug.zip) — download and extract the ZIP, then install the APK on Android 10+. This is a debug-signed test build; physical-device transfers have not been validated.
-- [Flutter project source ZIP](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-source.zip).
-- [ZIP checksums](SHA256SUMS.txt).
+## Android — no ZIP extraction
 
-The uncompressed APK is about 195 MiB; its ZIP fits GitHub's 100 MiB file limit. The archive preserves the APK exactly. APK SHA-256: `aa1cc2cfd12b773bf1e1df60cdd5288d61b25a68ff786ca6dfa1932e713fed9b`.
+**[Download SwiftDrop-0.1.0-android-debug.apk](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.1.0-android-debug.apk)**
 
-See [build instructions](../README.md), [validation results](../docs/VALIDATION.md), and [two-device checklist](../docs/TESTING.md). Windows source and installer instructions are included; no Windows binary is provided. This is a development release, not a production-signed release.
+- Size: **203,586,382 bytes** (about **203.6 MB**).
+- Android **10 or newer**. Debug-signed test build.
+- Open the downloaded `.apk` on Android to install it. GitHub may show a Git LFS notice: use **Download** / **Download raw file**.
+- APK SHA-256: `aa1cc2cfd12b773bf1e1df60cdd5288d61b25a68ff786ca6dfa1932e713fed9b`.
+- Physical Android-to-Windows operation still needs device testing; see the validation record.
+
+## All ordinary files
+
+- **[Every file: individual download, size and purpose](FILES.md)**.
+- **[Mobile/PC usage guide, including the folders in your screenshot](../docs/FILE_GUIDE.md)**.
+- **[Browse the source tree](https://github.com/wwwadeesaushen7/SwiftDrop)**. Source files are already stored individually.
+- **[Checksums](SHA256SUMS.txt)**.
+
+To get the complete project as normal files on PC, install Git and Git LFS, then:
+
+```powershell
+git lfs install
+git clone https://github.com/wwwadeesaushen7/SwiftDrop.git
+cd SwiftDrop
+git lfs pull
+```
+
+Use [the main build instructions](../README.md) to compile the Windows app. There is no verified ready-made Windows installer here. The `windows/` folder is its source/build integration; `packaging/swiftdrop.iss` is the installer recipe.
+
+## Earlier optional compressed packages
+
+These are kept so previous download links continue to work. You can use the direct APK and individual source files above instead.
+
+- [Earlier Android APK ZIP](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.1.0-android-debug.zip).
+- [Earlier source ZIP](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-source.zip). Clone the repository for the latest documentation and files.
