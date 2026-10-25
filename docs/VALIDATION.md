@@ -8,7 +8,11 @@ The user reported receiving an actual **0.2.0** Windows installer after being di
 
 A separate **Windows installer (version checked)** workflow now reads the actual compiled EXE's four-part resource version, compares it with `pubspec.yaml`, checks the Inno recipe, packages, and checks the installer resource version. Artifact names contain the version and commit. A separate main-branch publisher verifies metadata, bytes and SHA-256 before committing the exact versioned EXE, checksums and build information into `downloads`. Pull requests cannot publish. Failed builds report failure rather than reusing an older installer. The previous unversioned Windows job is removed to avoid duplicate/confusing builds.
 
+The actual `swiftdrop.exe` inside the owner-uploaded root `SwiftDrop.zip` was inspected with a PE resource reader: its string version is **0.2.0+2**, fixed file version **0.2.0.2**. It is not a 0.3.0 distribution.
+
 Publisher tests cover matching output, corrupt data, older app/installer versions, wrong source commits/build numbers/filenames, and failure reporting. These tests validate publication contracts; the real Windows packaging/build result must be read from [the Windows status page](../downloads/WINDOWS.md), which starts as pending. Do not claim a compiled 0.3.0 Windows installer exists until that workflow succeeds.
+
+The first checked Windows run for commit `4febe7f` reported **failure**: [run 40192426206](https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40192426206). Its separate status publisher succeeded and recorded failure in `downloads/windows-build.json`; **no 0.3.0 installer was published**. The GitHub API/logs are blocked in this cloud environment, so the failing step/error must be obtained before fixing or claiming a successful build. PowerShell parsing, source/recipe version agreement, actionlint workflow validation and four publisher tests passed locally; these do not establish Windows compilation.
 
 ## GitHub pull update — 0.3.0 (2026-10-25)
 

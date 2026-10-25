@@ -2,6 +2,8 @@
 
 ## Windows PC
 
+The repository-root `SwiftDrop.zip` contains the older Windows **0.2.0+2** app (verified from its executable resource). Use the version-checked Windows download/status link below for 0.3.0.
+
 **[Windows 0.3.0 download and verified build status](WINDOWS.md)**. The new Windows workflow checks the compiled app and installer version, then publishes a direct setup EXE here. Until it succeeds, the status page says pending or failed. Download the versioned artifact **SwiftDrop-0.3.0-Windows-installer-COMMIT** if using Actions. Close the older app before installing **SwiftDrop-0.3.0-windows-x64-setup.exe**. Flutter and the C++ development tools are not needed to install a built app.
 
 ## Android — no ZIP extraction
