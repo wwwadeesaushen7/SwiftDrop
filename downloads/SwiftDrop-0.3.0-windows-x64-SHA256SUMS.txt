@@ -1,0 +1,1 @@
+5b3faf6f113491395bcd28270afa070a62360c2f91ff6b1f4a62ae1b17639342  SwiftDrop-0.3.0-windows-x64-setup.exe

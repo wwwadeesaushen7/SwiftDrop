@@ -1,0 +1,10 @@
+{
+  "version": "0.3.0",
+  "build_number": 3,
+  "source_commit": "80a3fe88b37d2aaba035c4ee1097124e451e5382",
+  "application_version": "0.3.0.3",
+  "installer_version": "0.3.0",
+  "installer_filename": "SwiftDrop-0.3.0-windows-x64-setup.exe",
+  "installer_sha256": "5b3faf6f113491395bcd28270afa070a62360c2f91ff6b1f4a62ae1b17639342",
+  "installer_bytes": 12081004
+}

@@ -1,11 +1,13 @@
 # Windows download — SwiftDrop 0.3.0
 
-This run did not produce a verified installer (status: **failure**). [Open the build run](https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40193520315) for its error. Do not substitute a 0.2.0 download.
+**[Download SwiftDrop-0.3.0-windows-x64-setup.exe](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.3.0-windows-x64-setup.exe)** — 12.1 MB.
 
-Requested source commit: `3cc1e874db41501d6946ec8ff436716ddf0433ce`.
+This file was built on Windows. The compiled app version and installer version were checked against pubspec.yaml before publication.
 
-Packaging stage: **installer-version**.
+Source commit: `80a3fe88b37d2aaba035c4ee1097124e451e5382`. [Build run](https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40194019053).
 
-Error: `Installer embeds version 0.0.0; expected 0.3.0.`
+SHA-256: `5b3faf6f113491395bcd28270afa070a62360c2f91ff6b1f4a62ae1b17639342`.
 
-[Download the version-checked 0.3.0 portable app](https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40193520315/artifacts/12599191651). Extract the entire folder, keep its DLLs/data together, and run swiftdrop.exe. The installer build still needs fixing.
+Close the older SwiftDrop app, then run this installer. No Flutter SDK or C++ development tools are needed to install it. The development installer is unsigned; its Windows build and version checks do not establish physical-device transfer testing.
+
+After installation, the menu should show **GitHub files**, with **Push files** and **Pull files**.
