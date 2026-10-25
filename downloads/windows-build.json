@@ -1,5 +1,6 @@
 {
   "version": "0.3.0",
-  "status": "pending",
-  "workflow_url": "https://github.com/wwwadeesaushen7/SwiftDrop/actions/workflows/windows-download.yml"
+  "source_commit": "4febe7f25744a63d89a4eefdda4de514074df953",
+  "status": "failure",
+  "run_url": "https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40192426206"
 }
