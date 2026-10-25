@@ -68,3 +68,7 @@ Record device models, OS versions, app commit/version, filesystem, network type,
 ## Optional GitHub uploads
 
 Follow the [GitHub upload manual checklist](GITHUB_UPLOAD.md#validation-and-manual-check) on Android and Windows using a disposable repository. Live GitHub uploads and native OS vault behavior remain unverified here.
+
+## GitHub pulls and Windows-to-Windows use
+
+Use the [pull checklist](GITHUB_UPLOAD.md#pull-files-onto-your-pc-or-android-device) and [PC-to-PC instructions](PC_TO_PC.md). Check real LFS downloads, private/public access, safe destinations, cancellation and Android export on hardware. These remain manual validation steps.

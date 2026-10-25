@@ -1,11 +1,11 @@
 # SwiftDrop
 
-**[Download the Android APK directly — no ZIP extraction](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.2.0-android-debug.apk)** · **[Mobile/PC usage and file guide](docs/FILE_GUIDE.md)** · **[Every file: purpose and individual download](downloads/FILES.md)**.
+**[Download the Android APK directly — no ZIP extraction](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.3.0-android-debug.apk)** · **[Mobile/PC usage and file guide](docs/FILE_GUIDE.md)** · **[Every file: purpose and individual download](downloads/FILES.md)**.
 
-The APK is a 229.3 MB debug test build for Android 10+. All source files are also available individually in this repository; use Git and Git LFS to download the full project as normal files.
+The APK is a 229.4 MB debug test build for Android 10+. All source files are also available individually in this repository; use Git and Git LFS to download the full project as normal files.
 
 Private local file sharing in Flutter/Dart, with Android and Windows as the first targets.
-Nearby sharing needs no cloud storage or account. Devices must be able to reach each other on a trusted LAN/hotspot. Optional **Push to GitHub** uploads need internet and your own GitHub repository/token.
+Nearby sharing needs no cloud storage or account. Devices must be able to reach each other on a trusted LAN/hotspot. Optional **GitHub files** supports push and pull over the internet. Public pulls work without a token; pushes and private pulls use your own repository token.
 
 **Development build, not a certified production release.** See [validation status](docs/VALIDATION.md) for checks actually run and remaining release gates. Features described below are implemented in source; platform behavior must pass the checklist before release.
 
@@ -53,11 +53,13 @@ Start-Process $exe -ArgumentList '--profile=sender'
 
 Profiles isolate SQLite databases, private keys, paired devices and cached SAF selections. Both use the PC's private LAN address and distinct ports. Use a real LAN interface (not loopback) for app UI testing. The automated transport tests explicitly enable a **test-only** loopback bind with `--dart-define=SWIFTDROP_TEST=true`; never use that flag in distribution builds.
 
-## Push files to GitHub
+## Push and pull GitHub files
 
-Open **Home → Push files to GitHub** or **Menu → Push to GitHub**. Enter your repository, existing branch, optional destination folder and a fine-grained token with **Contents: Read and write**. Choose files, review destination paths and visibility, approve any replacements, then create one commit. Any readable file type is supported up to **100 MiB per file**, **200 files per commit**. Larger files require Git LFS outside SwiftDrop. Token storage is optional and uses the OS vault.
+Open **Home → GitHub: push / pull files** or **Menu → GitHub files**, then choose **Push files**. Enter your repository, existing branch, optional destination folder and a fine-grained token with **Contents: Read and write**. Choose files, review destination paths and visibility, approve any replacements, then create one commit. Any readable file type is supported up to **100 MiB per file**, **200 files per commit**. Larger files require Git LFS outside SwiftDrop. Token storage is optional and uses the OS vault.
 
-See [GitHub upload instructions and limitations](docs/GITHUB_UPLOAD.md). API integration is covered by local HTTP tests; a live GitHub account upload remains a manual validation step.
+Choose **Pull files** to browse an existing branch/folder, select files and download into a new local batch directory. Public pulls can be anonymous; private pulls require Contents read permission. Git LFS downloads resolve original content and verify SHA-256. Pulls preserve existing local files; Android provides Export to Downloads.
+
+See [GitHub push/pull instructions and limitations](docs/GITHUB_UPLOAD.md). API integration is covered by local HTTP tests; live account downloads remain a manual validation step. For offline sharing between PCs, follow [PC-to-PC instructions](docs/PC_TO_PC.md).
 
 ## Android APK
 
@@ -99,7 +101,7 @@ flutter build windows --release
 & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" packaging\swiftdrop.iss
 ```
 
-Installer: `build/installer/SwiftDrop-0.2.0-windows-x64-setup.exe`. It installs per user without silently changing firewall rules. Ship the entire Flutter release directory, never just the executable. Provision the Microsoft Visual C++ 2015–2022 x64 Redistributable on target systems. Code-sign both app and installer with your organization certificate before distribution. Store signing credentials outside the repository. Packaging version currently follows `0.2.0`; update the Inno version together with `pubspec.yaml` for releases.
+Installer: `build/installer/SwiftDrop-0.3.0-windows-x64-setup.exe`. It installs per user without silently changing firewall rules. Ship the entire Flutter release directory, never just the executable. Provision the Microsoft Visual C++ 2015–2022 x64 Redistributable on target systems. Code-sign both app and installer with your organization certificate before distribution. Store signing credentials outside the repository. Packaging version currently follows `0.3.0`; update the Inno version together with `pubspec.yaml` for releases.
 
 ## Linux development
 
@@ -134,7 +136,7 @@ See [manual two-device checks](docs/TESTING.md), [protocol/security](docs/PROTOC
 - `lib/core`: bounded metadata parsing, safe paths, wire models, streamed hashing.
 - `lib/features/pairing`: OS-stored identity, invitation validation and certificate pinning.
 - `lib/features/transfer`: HTTPS receiver, approval, chunk/checkpoint engine and sender.
-- `lib/features/github`: optional GitHub upload UI, token handling and streamed Git API commits.
+- `lib/features/github`: optional GitHub push/pull UI, token handling, streamed Git API commits and verified Git/LFS downloads.
 - `lib/features/discovery`: native mDNS/Bonjour integration.
 - `lib/features/storage`: local SQLite settings, history and checkpoints.
 - `android`, `windows`, `linux`: host runners; `packaging`: Windows installer.

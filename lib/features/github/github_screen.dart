@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/controller.dart';
 import 'github_controller.dart';
+import 'github_pull_panel.dart';
 
 class GitHubScreen extends StatefulWidget {
   final AppController app;
@@ -116,13 +117,32 @@ class _GitHubScreenState extends State<GitHubScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Push to GitHub',
+            'GitHub files',
             style: Theme.of(context).textTheme.headlineLarge
                 ?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 8),
           const Text(
-            'Upload selected files to a repository you can write to. Internet and a GitHub account are required.',
+            'Push local files to GitHub or pull repository files onto this device. Internet is required.',
+          ),
+          const SizedBox(height: 16),
+          SegmentedButton<bool>(
+            segments: const [
+              ButtonSegment(
+                value: false,
+                icon: Icon(Icons.upload),
+                label: Text('Push files'),
+              ),
+              ButtonSegment(
+                value: true,
+                icon: Icon(Icons.download),
+                label: Text('Pull files'),
+              ),
+            ],
+            selected: {c.pullMode},
+            onSelectionChanged: c.busy
+                ? null
+                : (values) => c.setPullMode(values.single),
           ),
           const SizedBox(height: 20),
           Card(
@@ -150,7 +170,9 @@ class _GitHubScreenState extends State<GitHubScreen> {
                   ),
                   field(
                     folder,
-                    'Destination folder (optional)',
+                    c.pullMode
+                        ? 'Repository folder (optional)'
+                        : 'Destination folder (optional)',
                     (v) => c.folder = v,
                     hint: 'uploads/photos',
                   ),
@@ -161,7 +183,7 @@ class _GitHubScreenState extends State<GitHubScreen> {
                     secret: true,
                   ),
                   const Text(
-                    'Use a fine-grained token limited to this repository, with Contents: Read and write. Your token is sent only to api.github.com over HTTPS.',
+                    'Use Contents: Read and write for pushes, or Read for private pulls. A token is optional for public pulls. Credentials go only to GitHub over HTTPS; Git LFS storage downloads use separate temporary credentials.',
                   ),
                   TextButton.icon(
                     onPressed: () => openUrl(
@@ -194,162 +216,193 @@ class _GitHubScreenState extends State<GitHubScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Choose files',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Uses the same selection as Send files. Any file type, up to 100 MiB per file and 200 files per commit. Larger files require Git LFS outside SwiftDrop.',
-                  ),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      FilledButton.tonalIcon(
-                        onPressed: disabled
-                            ? null
-                            : () async {
-                                invalidate();
-                                await widget.app.guard(widget.app.pickFiles);
-                              },
-                        icon: const Icon(Icons.add),
-                        label: const Text('Add files'),
-                      ),
-                      if (!Platform.isAndroid && !Platform.isIOS)
-                        OutlinedButton.icon(
-                          onPressed: disabled
-                              ? null
-                              : () async {
-                                  invalidate();
-                                  await widget.app.guard(widget.app.pickFolder);
-                                },
-                          icon: const Icon(Icons.folder_open),
-                          label: const Text('Add folder'),
-                        ),
-                      TextButton(
-                        onPressed: disabled
-                            ? null
-                            : () {
-                                invalidate();
-                                widget.app.clearSelection();
-                              },
-                        child: const Text('Clear selection'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    '${widget.app.selection.length} files · ${size(widget.app.selectionBytes)}',
-                  ),
-                  for (final source in widget.app.selection.take(20))
-                    Text(source.relativePath, overflow: TextOverflow.ellipsis),
-                  if (widget.app.selection.length > 20)
-                    const Text('Full destination list appears after review.'),
-                  const SizedBox(height: 16),
-                  FilledButton.icon(
-                    onPressed: disabled || widget.app.selection.isEmpty
-                        ? null
-                        : () {
-                            replace = false;
-                            c.preview(widget.app.selection);
-                          },
-                    icon: const Icon(Icons.fact_check_outlined),
-                    label: const Text('Review upload'),
-                  ),
-                ],
-              ),
+          if (c.pullMode)
+            GitHubPullPanel(
+              app: widget.app,
+              browse: (path, refresh) {
+                folder.text = path;
+                c.loadFiles(path: path, refresh: refresh);
+              },
             ),
-          ),
-          if (plan != null) ...[
-            const SizedBox(height: 16),
+          if (!c.pullMode) ...[
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '${plan.target.name} → ${plan.target.branch}',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      plan.isPrivate
-                          ? 'Private repository. People with repository access can see these files.'
-                          : 'Public repository: anyone can download these files.',
+                    const Text(
+                      'Choose files',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Review file contents before committing. Repository history retains previous versions; do not upload passwords or private keys.',
+                      'Uses the same selection as Send files. Any file type, up to 100 MiB per file and 200 files per commit. Larger files require Git LFS outside SwiftDrop.',
                     ),
                     const SizedBox(height: 12),
-                    for (final file in plan.files)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          '${file.replaces ? 'Replace' : 'Add'} · ${file.path} · ${size(file.stat.size)}',
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        FilledButton.tonalIcon(
+                          onPressed: disabled
+                              ? null
+                              : () async {
+                                  invalidate();
+                                  await widget.app.guard(widget.app.pickFiles);
+                                },
+                          icon: const Icon(Icons.add),
+                          label: const Text('Add files'),
                         ),
-                      ),
-                    if (plan.replacements > 0)
-                      CheckboxListTile(
-                        contentPadding: EdgeInsets.zero,
-                        value: replace,
-                        onChanged: c.busy
-                            ? null
-                            : (v) => setState(() => replace = v ?? false),
-                        title: Text(
-                          'Replace ${plan.replacements} existing file(s) in this commit',
+                        if (!Platform.isAndroid && !Platform.isIOS)
+                          OutlinedButton.icon(
+                            onPressed: disabled
+                                ? null
+                                : () async {
+                                    invalidate();
+                                    await widget.app.guard(
+                                      widget.app.pickFolder,
+                                    );
+                                  },
+                            icon: const Icon(Icons.folder_open),
+                            label: const Text('Add folder'),
+                          ),
+                        TextButton(
+                          onPressed: disabled
+                              ? null
+                              : () {
+                                  invalidate();
+                                  widget.app.clearSelection();
+                                },
+                          child: const Text('Clear selection'),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      '${widget.app.selection.length} files · ${size(widget.app.selectionBytes)}',
+                    ),
+                    for (final source in widget.app.selection.take(20))
+                      Text(
+                        source.relativePath,
+                        overflow: TextOverflow.ellipsis,
                       ),
+                    if (widget.app.selection.length > 20)
+                      const Text('Full destination list appears after review.'),
                     const SizedBox(height: 16),
-                    TextField(
-                      controller: message,
-                      enabled: !c.busy,
-                      maxLength: 1000,
-                      decoration: const InputDecoration(
-                        labelText: 'Commit message',
-                      ),
-                    ),
-                    const SizedBox(height: 12),
                     FilledButton.icon(
-                      onPressed: c.busy || (plan.replacements > 0 && !replace)
+                      onPressed: disabled || widget.app.selection.isEmpty
                           ? null
-                          : () => c.upload(message.text),
-                      icon: const Icon(Icons.cloud_upload_outlined),
-                      label: Text(
-                        'Commit ${plan.files.length} files to GitHub',
-                      ),
+                          : () {
+                              replace = false;
+                              c.preview(widget.app.selection);
+                            },
+                      icon: const Icon(Icons.fact_check_outlined),
+                      label: const Text('Review upload'),
                     ),
                   ],
                 ),
               ),
             ),
+            if (plan != null) ...[
+              const SizedBox(height: 16),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${plan.target.name} → ${plan.target.branch}',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        plan.isPrivate
+                            ? 'Private repository. People with repository access can see these files.'
+                            : 'Public repository: anyone can download these files.',
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Review file contents before committing. Repository history retains previous versions; do not upload passwords or private keys.',
+                      ),
+                      const SizedBox(height: 12),
+                      for (final file in plan.files)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Text(
+                            '${file.replaces ? 'Replace' : 'Add'} · ${file.path} · ${size(file.stat.size)}',
+                          ),
+                        ),
+                      if (plan.replacements > 0)
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          value: replace,
+                          onChanged: c.busy
+                              ? null
+                              : (v) => setState(() => replace = v ?? false),
+                          title: Text(
+                            'Replace ${plan.replacements} existing file(s) in this commit',
+                          ),
+                        ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: message,
+                        enabled: !c.busy,
+                        maxLength: 1000,
+                        decoration: const InputDecoration(
+                          labelText: 'Commit message',
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      FilledButton.icon(
+                        onPressed: c.busy || (plan.replacements > 0 && !replace)
+                            ? null
+                            : () => c.upload(message.text),
+                        icon: const Icon(Icons.cloud_upload_outlined),
+                        label: Text(
+                          'Commit ${plan.files.length} files to GitHub',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ],
           if (c.busy && progress != null) ...[
             const SizedBox(height: 20),
             LinearProgressIndicator(
-              value: progress.total > 0 && progress.state == 'Uploading'
+              value:
+                  progress.total > 0 &&
+                      (progress.state == 'Uploading' ||
+                          progress.state.startsWith('Downloading'))
                   ? (progress.bytes / progress.total).clamp(0, 1)
                   : null,
             ),
             const SizedBox(height: 8),
             Text('${progress.state} ${progress.file}'),
             if (progress.total > 0)
-              Text('${size(progress.bytes)} / ${size(progress.total)} sent'),
+              Text(
+                '${size(progress.bytes)} / ${size(progress.total)} ${c.pullMode ? 'received' : 'sent'}',
+              ),
             TextButton(
               onPressed: progress.canCancel ? c.cancel : null,
-              child: Text(progress.canCancel ? 'Cancel' : 'Finishing commit…'),
+              child: Text(
+                progress.canCancel
+                    ? 'Cancel'
+                    : (c.pullMode
+                          ? 'Finishing download…'
+                          : 'Finishing commit…'),
+              ),
             ),
-            const Text(
-              'Keep mobile uploads in the foreground. Interrupted uploads must be restarted; the branch updates only after the batch is ready.',
+            Text(
+              c.pullMode
+                  ? 'Keep mobile downloads in the foreground. Interrupted pulls must be restarted; incomplete batches are discarded.'
+                  : 'Keep mobile uploads in the foreground. Interrupted uploads must be restarted; the branch updates only after the batch is ready.',
             ),
           ],
           if (c.error != null) ...[

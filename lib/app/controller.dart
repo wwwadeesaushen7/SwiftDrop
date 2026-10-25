@@ -84,6 +84,9 @@ class AppController extends ChangeNotifier {
         );
       }
       identity = await Identity.load(secrets);
+      github.downloadDestination = Platform.isAndroid || Platform.isIOS
+          ? p.join(support.path, 'github-downloads')
+          : store.setting('github.downloadDestination') ?? destination!.path;
       final savedPeers = await secrets.read('peers');
       if (savedPeers != null) {
         peers = (jsonDecode(savedPeers) as List)
@@ -421,6 +424,16 @@ class AppController extends ChangeNotifier {
     name = value;
     store.setSetting('name', name);
     notifyListeners();
+  }
+
+  Future<void> chooseGitHubDestination() async {
+    if (github.busy || Platform.isAndroid || Platform.isIOS) return;
+    final folder = await FilePicker.getDirectoryPath();
+    if (folder != null) {
+      github.downloadDestination = folder;
+      store.setSetting('github.downloadDestination', folder);
+      changed();
+    }
   }
 
   void setTheme(String value) {

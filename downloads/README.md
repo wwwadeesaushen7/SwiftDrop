@@ -2,15 +2,15 @@
 
 ## Android — no ZIP extraction
 
-**[Download SwiftDrop-0.2.0-android-debug.apk](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.2.0-android-debug.apk)**
+**[Download SwiftDrop-0.3.0-android-debug.apk](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.3.0-android-debug.apk)**
 
-- Size: **229,345,457 bytes** (about **229.3 MB**).
+- Size: **229,402,098 bytes** (about **229.4 MB**).
 - Android **10 or newer**. Debug-signed test build.
 - Open the downloaded `.apk` on Android to install it. GitHub may show a Git LFS notice: use **Download** / **Download raw file**.
-- APK SHA-256: `1edd9cce668208b94031bfcbe738d25e776936fe1625115195714f42e4a07baa`.
+- APK SHA-256: `84827102f126c788d65973a8c56e07536cb028510c1e68d4ffcba8d4500b752b`.
 - Physical Android-to-Windows operation still needs device testing; see the validation record.
 
-Version **0.2.0** includes **Push to GitHub**. See [how to upload your files](../docs/GITHUB_UPLOAD.md). The older 0.1.0 APK and ZIPs remain available but do not contain this feature.
+Version **0.3.0** includes **GitHub push and pull**, including Git LFS downloads. See [how to upload your files](../docs/GITHUB_UPLOAD.md). Older APKs and ZIPs remain available for previous links; use 0.3.0 for pull support.
 
 ## All ordinary files
 

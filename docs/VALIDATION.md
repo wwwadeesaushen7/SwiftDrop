@@ -2,6 +2,19 @@
 
 This is an initial development implementation, not a production-certified cross-platform release. Checks below ran in the managed Linux environment. A built APK does not establish Android-to-Windows compatibility.
 
+## GitHub pull update — 0.3.0 (2026-10-25)
+
+- Added **GitHub files → Push files / Pull files**. Browse public repositories anonymously or private repositories with Contents read permission, navigate a pinned commit, select up to 200 files and choose a desktop destination. Downloads stream to unique batch directories, preserve existing local files, verify ordinary Git blob SHA-1 / LFS SHA-256, and discard incomplete batches on cancellation or errors. Android supports app-owned downloads with direct/History export to Downloads.
+- Git LFS downloads resolve the original content rather than saving the pointer file. Tokens remain confined to GitHub API/LFS endpoints, storage actions use separate temporary credentials, and unsafe paths/symlinks/submodules/hosts/redirects are rejected. Directories are limited to 1,000 displayed entries; narrower paths can traverse larger ancestors within the metadata limit.
+- `flutter analyze`: **no issues**. Formatting checks pass. All **54 tests pass**, 0 failed, 0 skipped in Linux: 39 previous tests plus 15 pull tests. Real loopback HTTP tests cover binary/Unicode/empty downloads, LFS resolution/integrity, public reads, immutable folder navigation, directory limits, source/destination preservation, cancellation, unsafe paths/hosts and history. Widget tests open both modes at 390×844 and 1280×800.
+- Android debug APK **0.3.0+3** built successfully (final incremental build 8.9 seconds), **229,402,098 bytes**. APK Signature Scheme v2 and ZIP CRC checks pass; Android minimum 29, target/compile 36. SHA-256: `84827102f126c788d65973a8c56e07536cb028510c1e68d4ffcba8d4500b752b`. This remains a debug-signed development build; physical Android installation/export is unrun here.
+- User screenshots showed version 0.2.0's Windows CI job succeeding and its app UI running on Windows. Version 0.3.0 Windows compilation is left to the updated GitHub Actions run; that run is not verified from this environment. Physical Windows-to-Windows file transfer is unrun. Added [PC-to-PC instructions](PC_TO_PC.md).
+- Live GitHub REST/LFS downloads through the app are **unrun here** because the cloud network blocks `api.github.com`. No real user token was requested for testing. The download suite exercises actual sockets/file streams against a local API fixture; it does not establish live GitHub authorization or native OS vault/export behavior.
+- Pull limitations: files selected from one displayed folder per batch; no recursive folder download, Git working-copy merge, interrupted GitHub download resume, Git LFS upload or Release asset support. GitHub quotas and filesystem limits still apply. See [GitHub instructions](GITHUB_UPLOAD.md).
+- Incorporated the repository owner's newer `SwiftDrop.zip` upload before development; that file is preserved unchanged.
+
+The records below refer to earlier versions and their validation at the time.
+
 ## GitHub upload update — 0.2.0 (2026-10-25)
 
 - Added **Push to GitHub** with repository/branch/folder selection, fine-grained personal access tokens, optional OS vault persistence/forget, explicit review and replacement approval, bounded streamed binary uploads, cancellation, Git object verification and one non-force branch update per batch. Repository tree metadata caches are bounded to four directories.

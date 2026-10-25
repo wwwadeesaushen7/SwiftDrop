@@ -17,6 +17,11 @@ class GitHubController extends ChangeNotifier {
   String? error, commitUrl, recoveryUrl;
   GitHubPlan? plan;
   GitHubProgress? progress;
+  bool pullMode = false;
+  GitHubListing? listing;
+  final selectedRemote = <String>{};
+  GitHubPullResult? pullResult;
+  String downloadDestination = '';
   GitHubApi? _active;
   bool _closed = false;
   GitHubController(
@@ -40,6 +45,9 @@ class GitHubController extends ChangeNotifier {
   void invalidate() {
     if (busy) return;
     plan = null;
+    listing = null;
+    selectedRemote.clear();
+    pullResult = null;
     commitUrl = null;
     recoveryUrl = null;
     progress = null;
@@ -71,7 +79,8 @@ class GitHubController extends ChangeNotifier {
         _ => 'GitHub operation failed. Check the token, repository and connection, then review again.',
       };
       if (_active?.cancelled == true && recoveryUrl == null) {
-        error = 'GitHub upload cancelled. No batch was published.';
+        error =
+            'GitHub operation cancelled. Incomplete downloads were discarded.';
       }
       if (recoveryUrl != null) {
         error =
@@ -101,12 +110,97 @@ class GitHubController extends ChangeNotifier {
       final result = await api.preview(target, List.of(sources));
       // Tokens are never put in SQLite or the repository. An empty vault value
       // revokes the remembered token without affecting pairing credentials.
-      await secrets.write('github.token', rememberToken ? token.trim() : '');
-      store.setSetting('github.repository', target.name);
-      store.setSetting('github.branch', target.branch);
-      store.setSetting('github.folder', target.folder);
+      await _saveConnection(target);
       plan = result;
       progress = null;
+    });
+  }
+
+  Future<void> _saveConnection(GitHubTarget target) async {
+    await secrets.write('github.token', rememberToken ? token.trim() : '');
+    store.setSetting('github.repository', target.name);
+    store.setSetting('github.branch', target.branch);
+    store.setSetting('github.folder', target.folder);
+  }
+
+  void setPullMode(bool value) {
+    if (busy || value == pullMode) return;
+    pullMode = value;
+    invalidate();
+  }
+
+  Future<void> loadFiles({String? path, bool refresh = false}) async {
+    if (busy) return;
+    final commit = refresh ? null : listing?.commit;
+    if (path != null) folder = path;
+    await _run((api) async {
+      listing = null;
+      selectedRemote.clear();
+      pullResult = null;
+      progress = const GitHubProgress('Browsing repository', '', 0, 0);
+      _changed();
+      final target = GitHubTarget(repository, branch, folder);
+      final result = await api.browse(target, commit: commit);
+      await _saveConnection(target);
+      listing = result;
+      progress = null;
+    });
+  }
+
+  void selectRemote(String path, bool selected) {
+    if (busy || listing == null) return;
+    if (selected) {
+      if (selectedRemote.length >= githubMaxFiles) {
+        error = 'At most 200 files per pull. Download this selection first.';
+      } else if (listing!.entries.any(
+        (e) => !e.isDirectory && e.path == path,
+      )) {
+        selectedRemote.add(path);
+      }
+    } else {
+      selectedRemote.remove(path);
+    }
+    _changed();
+  }
+
+  Future<void> pullSelected() async {
+    final snapshot = listing;
+    if (snapshot == null) return;
+    final files = snapshot.entries
+        .where((e) => selectedRemote.contains(e.path))
+        .toList();
+    await _run((api) async {
+      pullResult = null;
+      if (downloadDestination.isEmpty) {
+        throw const GitHubFailure('Choose a download folder first.');
+      }
+      var lastUpdate = DateTime.fromMillisecondsSinceEpoch(0);
+      progress = const GitHubProgress('Preparing download', '', 0, 0);
+      _changed();
+      final result = await api.pull(
+        snapshot,
+        files,
+        Directory(downloadDestination),
+        (value) {
+          progress = value;
+          final now = DateTime.now();
+          if (!value.canCancel ||
+              now.difference(lastUpdate).inMilliseconds >= 100) {
+            lastUpdate = now;
+            _changed();
+          }
+        },
+      );
+      pullResult = result;
+      store.put('history', 'github-${DateTime.now().microsecondsSinceEpoch}', {
+        'direction': 'Pulled',
+        'peer': 'GitHub ${snapshot.target.name}',
+        'files': result.files,
+        'bytes': result.bytes,
+        'path': result.path,
+        'time': DateTime.now().toIso8601String(),
+        'commit': snapshot.commit,
+      });
     });
   }
 

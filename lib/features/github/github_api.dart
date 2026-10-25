@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:path/path.dart' as p;
 
 import '../../core/protocol.dart';
 import '../transfer/sender.dart';
+
+part 'github_pull.dart';
 
 const githubMaxFileBytes = 100 * 1024 * 1024;
 const githubMaxFiles = 200;
@@ -142,6 +145,7 @@ class GitHubApi {
 
   static String _validToken(String value) {
     final token = value.trim();
+    if (token.isEmpty) return token; // Anonymous reads of public repositories.
     if (!RegExp(r'^[A-Za-z0-9_]{10,255}$').hasMatch(token)) {
       throw const GitHubFailure('Enter a valid GitHub personal access token.');
     }
@@ -163,7 +167,7 @@ class GitHubApi {
   }
 
   void _checkCancelled() {
-    if (_cancelled) throw const GitHubFailure('GitHub upload cancelled.');
+    if (_cancelled) throw const GitHubFailure('GitHub operation cancelled.');
   }
 
   List<String> _root(GitHubTarget target) => [
@@ -190,7 +194,9 @@ class GitHubApi {
     final uri = _base.replace(pathSegments: path);
     final request = await _client.openUrl(method, uri);
     request.followRedirects = false; // Never forward tokens to another host.
-    request.headers.set(HttpHeaders.authorizationHeader, 'Bearer $_token');
+    if (_token.isNotEmpty) {
+      request.headers.set(HttpHeaders.authorizationHeader, 'Bearer $_token');
+    }
     request.headers.set(
       HttpHeaders.acceptHeader,
       'application/vnd.github+json',
@@ -215,7 +221,7 @@ class GitHubApi {
       final message = switch (response.statusCode) {
         301 || 302 || 307 || 308 => 'Repository moved. Enter its current owner/repository; redirects are disabled to protect your token.',
         401 => 'GitHub rejected the token. Check its value and expiry.',
-        403 || 429 => 'GitHub denied access or rate-limited requests. Check Contents read/write permission, organization approval and rate limits.',
+        403 || 429 => 'GitHub denied access or rate-limited requests. Check Contents permission (read for pulls, read/write for pushes), organization approval and rate limits.',
         404 => 'Repository or branch not found. Check the name, branch and token repository access.',
         409 => 'Initialize this repository with a README on GitHub, or check that the branch has not changed, then review again.',
         422 => 'GitHub rejected the update. The branch may have changed or be protected. Review again or use an existing writable branch. Workflow files need additional GitHub permission.',
@@ -250,6 +256,11 @@ class GitHubApi {
     GitHubTarget target,
     List<SourceFile> sources,
   ) async {
+    if (_token.isEmpty) {
+      throw const GitHubFailure(
+        'A token with Contents read/write permission is required to push files.',
+      );
+    }
     if (sources.isEmpty || sources.length > githubMaxFiles) {
       throw const GitHubFailure(
         'Select between 1 and 200 files per GitHub commit.',

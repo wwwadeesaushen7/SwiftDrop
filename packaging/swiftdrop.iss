@@ -1,6 +1,6 @@
 ; Build from repository root with ISCC.exe packaging\swiftdrop.iss.
 ; The entire Flutter release directory is required, including data and DLLs.
-#define AppVersion "0.2.0"
+#define AppVersion "0.3.0"
 [Setup]
 AppId={{C0CB0348-38C5-4513-96D6-271C878AF1CB}
 AppName=SwiftDrop

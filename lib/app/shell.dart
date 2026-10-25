@@ -91,7 +91,7 @@ class _SwiftDropShellState extends State<SwiftDropShell>
     'History',
     'Settings',
     'Connection help',
-    'Push to GitHub',
+    'GitHub files',
   ];
   static const icons = [
     Icons.grid_view_rounded,
@@ -370,6 +370,7 @@ class _SwiftDropShellState extends State<SwiftDropShell>
                                   : null,
                             ),
                             child: SingleChildScrollView(
+                              key: PageStorageKey<int>(page),
                               padding: EdgeInsets.all(wide ? 36 : 20),
                               child: Center(
                                 child: ConstrainedBox(
@@ -527,7 +528,7 @@ class _SwiftDropShellState extends State<SwiftDropShell>
       OutlinedButton.icon(
         onPressed: () => navigate(9),
         icon: const Icon(Icons.cloud_upload_outlined),
-        label: const Text('Push files to GitHub'),
+        label: const Text('GitHub: push / pull files'),
       ),
       if (c.progress != null) ...[
         const SizedBox(height: 24),
