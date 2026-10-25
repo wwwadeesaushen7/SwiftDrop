@@ -61,6 +61,17 @@ class PublisherTests(unittest.TestCase):
         self.assertFalse((self.root / "downloads" / self.name).exists())
         self.assertIn("did not produce a verified installer", (self.root / "downloads/WINDOWS.md").read_text())
 
+    def test_failure_reports_packaging_error_and_redacts_token_patterns(self):
+        (self.artifact / "windows-packaging-error.json").write_text(json.dumps({
+            "stage": "compiled-executable-version", "version": "0.3.0",
+            "compiled_version": "0.2.0.2", "message": "Version mismatch github_pat_example_secret",
+            "environment": "must not be copied",
+        }))
+        status = self.run_publish("failure")
+        self.assertEqual(status["packaging_error"]["compiled_version"], "0.2.0.2")
+        self.assertNotIn("environment", status["packaging_error"])
+        self.assertNotIn("github_pat_", (self.root / "downloads/windows-build.json").read_text())
+
 
 if __name__ == "__main__":
     unittest.main()

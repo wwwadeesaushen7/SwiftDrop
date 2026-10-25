@@ -11,7 +11,7 @@ import re
 import shutil
 
 
-def publish(root, artifact, source_commit, build_result, run_url, repository):
+def publish(root, artifact, source_commit, build_result, run_url, repository, portable_url=""):
     root = Path(root)
     match = re.search(r"(?m)^version:\s*(\d+\.\d+\.\d+)\+(\d+)\s*$", (root / "pubspec.yaml").read_text())
     if not match or not re.fullmatch(r"[0-9a-f]{40}", source_commit):
@@ -53,9 +53,24 @@ def publish(root, artifact, source_commit, build_result, run_url, repository):
                 "The development installer is unsigned; its Windows build and version checks do not establish physical-device transfer testing.\n\n"
                 "After installation, the menu should show **GitHub files**, with **Push files** and **Pull files**.\n")
     else:
+        diagnostic_file = Path(artifact) / "windows-packaging-error.json"
+        diagnostic = {}
+        if diagnostic_file.exists() and diagnostic_file.stat().st_size < 16384:
+            raw = json.loads(diagnostic_file.read_text())
+            for key in ("stage", "version", "compiled_version", "message"):
+                value = raw.get(key)
+                if isinstance(value, str):
+                    diagnostic[key] = re.sub(r"(github_pat_|gh[pousr]_)[A-Za-z0-9_]+", "[redacted]", value[:1200])
+            status["packaging_error"] = diagnostic
         text = (heading + f"This run did not produce a verified installer (status: **{build_result}**). "
                 f"[Open the build run]({run_url}) for its error. Do not substitute a 0.2.0 download.\n\n"
                 f"Requested source commit: `{source_commit}`.\n")
+        if diagnostic:
+            message = diagnostic.get('message', 'See the build run.').replace('`', "'")
+            text += f"\nPackaging stage: **{diagnostic.get('stage', 'unknown')}**.\n\nError: `{message}`\n"
+        if portable_url.startswith(f"https://github.com/{repository}/actions/runs/"):
+            status["portable_url"] = portable_url
+            text += f"\n[Download the version-checked {version} portable app]({portable_url}). Extract the entire folder, keep its DLLs/data together, and run swiftdrop.exe. The installer build still needs fixing.\n"
     (downloads / "WINDOWS.md").write_text(text)
     (downloads / "windows-build.json").write_text(json.dumps(status, indent=2) + "\n")
     return status
@@ -63,4 +78,4 @@ def publish(root, artifact, source_commit, build_result, run_url, repository):
 
 if __name__ == "__main__":
     publish(Path.cwd(), os.environ["WINDOWS_ARTIFACT_DIR"], os.environ["SOURCE_COMMIT"],
-            os.environ["BUILD_RESULT"], os.environ["WINDOWS_RUN_URL"], os.environ["GITHUB_REPOSITORY"])
+            os.environ["BUILD_RESULT"], os.environ["WINDOWS_RUN_URL"], os.environ["GITHUB_REPOSITORY"], os.environ.get("WINDOWS_PORTABLE_URL", ""))

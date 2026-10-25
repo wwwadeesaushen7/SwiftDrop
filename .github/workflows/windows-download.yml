@@ -26,6 +26,7 @@ jobs:
     outputs:
       version: ${{ steps.package.outputs.version }}
       artifact: ${{ steps.package.outputs.artifact }}
+      portable_url: ${{ steps.portable.outputs.artifact-url }}
     steps:
       - uses: actions/checkout@v4
         env:
@@ -44,6 +45,13 @@ jobs:
         id: package
         shell: pwsh
         run: ./tool/package-windows.ps1
+      - name: Preserve local packaging failure reason
+        if: failure() && steps.package.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-packaging-diagnostic-${{ github.sha }}
+          if-no-files-found: warn
+          path: build/windows-packaging-error.json
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.package.outputs.artifact }}
@@ -54,6 +62,8 @@ jobs:
             build/installer/BUILD-INFO.json
             build/installer/SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
+        id: portable
+        if: always() && steps.package.outputs.app_version_checked == 'true'
         with:
           name: SwiftDrop-${{ steps.package.outputs.version }}-Windows-portable-${{ github.sha }}
           if-no-files-found: error
@@ -79,12 +89,19 @@ jobs:
         with:
           name: ${{ needs.build.outputs.artifact }}
           path: ${{ runner.temp }}/windows-installer
+      - uses: actions/download-artifact@v4
+        if: needs.build.result == 'failure'
+        continue-on-error: true
+        with:
+          name: Windows-packaging-diagnostic-${{ github.sha }}
+          path: ${{ runner.temp }}/windows-installer
       - name: Verify hash and publish versioned installer or build status
         env:
           BUILD_RESULT: ${{ needs.build.result }}
           SOURCE_COMMIT: ${{ github.sha }}
           WINDOWS_ARTIFACT_DIR: ${{ runner.temp }}/windows-installer
           WINDOWS_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          WINDOWS_PORTABLE_URL: ${{ needs.build.outputs.portable_url }}
         run: |
           python3 tool/publish_windows.py
           git config user.name 'github-actions[bot]'
