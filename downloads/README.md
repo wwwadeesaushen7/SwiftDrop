@@ -4,7 +4,11 @@
 
 The repository-root `SwiftDrop.zip` contains the older Windows **0.2.0+2** app (verified from its executable resource). Use the version-checked Windows download/status link below for 0.3.0.
 
-**[Windows 0.3.0 download and verified build status](WINDOWS.md)**. The new Windows workflow checks the compiled app and installer version, then publishes a direct setup EXE here. Until it succeeds, the status page says pending or failed. Download the versioned artifact **SwiftDrop-0.3.0-Windows-installer-COMMIT** if using Actions. Close the older app before installing **SwiftDrop-0.3.0-windows-x64-setup.exe**. Flutter and the C++ development tools are not needed to install a built app.
+**[Download SwiftDrop-0.3.0-windows-x64-setup.exe — 12.1 MB](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.3.0-windows-x64-setup.exe)**
+
+The Windows build, tests and installer version checks passed in [run 40194019053](https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40194019053). The downloaded installer was independently checked: native file version **0.3.0.0**, compiled app **0.3.0.3**, size **12,081,004 bytes**. [Build information and SHA-256](WINDOWS.md).
+
+Close the older SwiftDrop app, install this setup EXE, and launch SwiftDrop from Start. The menu should show **GitHub files → Push files / Pull files**. Flutter and C++ development tools are not needed to install it. This is an unsigned development build; physical-device transfer validation is still required.
 
 ## Android — no ZIP extraction
 

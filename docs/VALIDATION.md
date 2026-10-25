@@ -2,6 +2,14 @@
 
 This is an initial development implementation, not a production-certified cross-platform release. Checks below ran in the managed Linux environment. A built APK does not establish Android-to-Windows compatibility.
 
+## Verified Windows 0.3.0 installer (2026-10-25)
+
+- Windows [run 40194019053](https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40194019053) for source `80a3fe88b37d2aaba035c4ee1097124e451e5382` **succeeded**: analysis, automated Windows tests, release compilation, installer packaging/resource-version checks and direct publication completed. The build metadata records compiled app **0.3.0.3** / installer **0.3.0**.
+- The published EXE was fetched through Git and independently inspected with a PE resource parser in this environment. Its actual native file version is **0.3.0.0**, size **12,081,004 bytes**, SHA-256 **`5b3faf6f113491395bcd28270afa070a62360c2f91ff6b1f4a62ae1b17639342`**. This verifies the concrete file, not merely the filename or YAML configuration.
+- The previous failure was at `installer-version`: the app was **0.3.0.3** but the setup resource reported **0.0.0**. Explicit `VersionInfoVersion` and `VersionInfoProductVersion` now use the same `AppVersion` value. Version checks were retained.
+- Packaging diagnostics are now recorded as a bounded local exception/stage, excluding environment/credential data. Five publisher tests, PowerShell syntax/source-recipe checks and actionlint validation pass. The earlier failed packaging run preserved a version-checked [portable 0.3.0 app](https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40193520315/artifacts/12599191651).
+- **The installer is unsigned and remains a development build.** Windows installation/launch of this exact new installer and physical Android↔Windows transfers have not been observed here. A successful build/version/hash check does not establish those runtime results.
+
 ## Windows installer version correction (2026-10-25)
 
 The user reported receiving an actual **0.2.0** Windows installer after being directed to a generic **SwiftDrop-Windows** Actions artifact. Earlier screenshots established a 0.2.0 Windows build; they did not establish a successful 0.3.0 build. The source and Inno recipe already declare 0.3.0.

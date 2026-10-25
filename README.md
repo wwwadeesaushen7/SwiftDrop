@@ -1,6 +1,6 @@
 # SwiftDrop
 
-**[Windows PC installer and version-checked build status](downloads/WINDOWS.md)** — expected current version **0.3.0**. A successful Windows build publishes the setup EXE directly; pending/failed builds are shown explicitly.
+**[Download Windows PC installer — SwiftDrop 0.3.0, 12.1 MB](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.3.0-windows-x64-setup.exe)** · [Verified Windows build and checksum](downloads/WINDOWS.md).
 
 **[Download the Android APK directly — no ZIP extraction](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.3.0-android-debug.apk)** · **[Mobile/PC usage and file guide](docs/FILE_GUIDE.md)** · **[Every file: purpose and individual download](downloads/FILES.md)**.
 
