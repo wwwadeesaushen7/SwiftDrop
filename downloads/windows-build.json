@@ -1,6 +1,13 @@
 {
   "version": "0.3.0",
-  "source_commit": "4febe7f25744a63d89a4eefdda4de514074df953",
+  "source_commit": "3cc1e874db41501d6946ec8ff436716ddf0433ce",
   "status": "failure",
-  "run_url": "https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40192426206"
+  "run_url": "https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40193520315",
+  "packaging_error": {
+    "stage": "installer-version",
+    "version": "0.3.0",
+    "compiled_version": "0.3.0.3",
+    "message": "Installer embeds version 0.0.0; expected 0.3.0."
+  },
+  "portable_url": "https://github.com/wwwadeesaushen7/SwiftDrop/actions/runs/40193520315/artifacts/12599191651"
 }
