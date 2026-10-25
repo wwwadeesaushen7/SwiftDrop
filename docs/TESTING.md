@@ -64,3 +64,7 @@ Record device models, OS versions, app commit/version, filesystem, network type,
 - [ ] Windows installer installs/uninstalls on a clean Windows 10 machine; DLL/data assets and VC runtime are present.
 - [ ] Private-only Windows firewall rule documented; test refusal and recovery without disabling firewall.
 - [ ] Installer and Windows binary signed before public distribution.
+
+## Optional GitHub uploads
+
+Follow the [GitHub upload manual checklist](GITHUB_UPLOAD.md#validation-and-manual-check) on Android and Windows using a disposable repository. Live GitHub uploads and native OS vault behavior remain unverified here.

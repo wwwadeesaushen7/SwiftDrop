@@ -6,7 +6,7 @@ The folders in your screenshot contain the developer project. GitHub stores the 
 
 | What you want | What to get |
 | --- | --- |
-| Use SwiftDrop on an Android phone | [Download the APK directly](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.1.0-android-debug.apk). About **203.6 MB**, Android **10+**, debug test build. No outer ZIP or extraction step. |
+| Use SwiftDrop on an Android phone | [Download the APK directly](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.2.0-android-debug.apk). About **203.6 MB**, Android **10+**, debug test build. No outer ZIP or extraction step. |
 | Read or edit the source | The normal files in this repository, especially `lib/`. |
 | Download the whole project as individual files on Windows | Clone with Git and Git LFS using the commands below. Git creates the folder tree for you. |
 | Use SwiftDrop on a Windows PC | Build the Windows app from the full project. No verified ready-made Windows installer is provided here. |
@@ -16,7 +16,7 @@ The folders in your screenshot contain the developer project. GitHub stores the 
 
 1. Open [the repository](https://github.com/wwwadeesaushen7/SwiftDrop) in your browser. Sign in if GitHub asks, especially if the repository is private.
 2. Tap the **downloads** folder shown in your screenshot.
-3. Tap **SwiftDrop-0.1.0-android-debug.apk**. This is the new direct installer, without `.zip` at the end.
+3. Tap **SwiftDrop-0.2.0-android-debug.apk**. This is the new direct installer, without `.zip` at the end.
 4. Use GitHub's **Download** / **Download raw file** button (a downward arrow; it can be inside the three-dot menu on a narrow screen). GitHub may show a **Git LFS** notice because this is a large file; choose its Download button. You can also use the direct APK link above.
 5. Once the approximately 203.6 MB download finishes, open Android's **Files → Downloads** and tap the APK.
 6. If Android requests it, allow installation from the browser or Files app you are using, then tap **Install → Open**.
@@ -33,6 +33,10 @@ This is a debug-signed development build. Installation and transfers on physical
 4. Sender: open **Pair devices → Scan QR**, or paste the receiver's full invitation. Allow camera permission if scanning. The receiver must approve pairing.
 5. Sender: open **Send files**, select files and the paired receiver, and request the transfer. Receiver: **Accept**.
 6. Keep both apps open while transferring. On Android, use **History → Export verified files to Downloads** to copy completed files to a user-visible Downloads folder.
+
+## Upload your files to GitHub from the app
+
+SwiftDrop **0.2.0** adds **Home → Push files to GitHub**. Enter your repository, existing branch and a fine-grained token with Contents read/write access; choose files, review, then commit. Internet is required. Files are limited to 100 MiB each and 200 per commit. [Step-by-step GitHub instructions](GITHUB_UPLOAD.md).
 
 ## Windows: download every source file without a ZIP
 

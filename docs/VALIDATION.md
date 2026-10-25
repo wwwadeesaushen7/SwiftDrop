@@ -1,8 +1,19 @@
-# Validation record — 2026-10-24
+# Validation record — updated 2026-10-25
 
 This is an initial development implementation, not a production-certified cross-platform release. Checks below ran in the managed Linux environment. A built APK does not establish Android-to-Windows compatibility.
 
-## Passed
+## GitHub upload update — 0.2.0 (2026-10-25)
+
+- Added **Push to GitHub** with repository/branch/folder selection, fine-grained personal access tokens, optional OS vault persistence/forget, explicit review and replacement approval, bounded streamed binary uploads, cancellation, Git object verification and one non-force branch update per batch.
+- `flutter analyze`: **no issues**. All **39 tests pass** (27 existing + 12 GitHub tests); responsive widget checks now also open the GitHub screen at 390×844 and 1280×800.
+- GitHub tests use real loopback HTTP sockets and file streams against an API fixture. **Live GitHub account uploads are unrun:** this environment blocks `api.github.com`. No user token was requested or used for these tests.
+- Android debug APK **0.2.0+2** built successfully in 34.8 seconds. Size **203,629,234 bytes**; APK signature v2 and ZIP CRC checks passed. Minimum Android SDK 29, target/compile 36. SHA-256: `01068985aa79bda507be269c6c17aceb7324b7dbbb9e12ab7e27b93dd2be4c6e`.
+- This is a debug-signed development APK, not a production-signed release. Physical Android use, real OS token persistence and Windows compilation/runtime remain unrun. Windows Inno Setup version updated to 0.2.0.
+- GitHub uploads require internet, an initialized existing repository and an existing writable branch. Limit 100 MiB per file / 200 files per batch; Git LFS, repository/branch creation and interrupted GitHub upload resume are not implemented. See [instructions and manual checks](GITHUB_UPLOAD.md).
+
+The remaining sections record the original 0.1.0 validation. Its old APK and source archives do not include this update.
+
+## Original 0.1.0 checks: passed
 
 - Flutter **3.47.8**, Dart **3.13.7**, official revision `737ba8f885dc774b53b442759999a312c9461e4e`.
 - Dependency resolution and `flutter pub get --enforce-lockfile`; `pubspec.lock` is provided. `desktop_drop` **0.8.4** is intentionally pinned because 0.9.2 requires `cross_file` 0.4, incompatible with `file_picker` 13.2.0. No dependency overrides or disabled verification.

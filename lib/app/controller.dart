@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../core/protocol.dart';
 import '../features/discovery/discovery.dart';
+import '../features/github/github_controller.dart';
 import '../features/pairing/identity.dart';
 import '../features/storage/store.dart';
 import '../features/transfer/receiver.dart';
@@ -22,6 +23,7 @@ class AppController extends ChangeNotifier {
   final String profile;
   late final Sender sender;
   late final Discovery discovery;
+  late final GitHubController github;
   late Directory support;
   Directory? destination;
   Receiver? receiver;
@@ -63,6 +65,8 @@ class AppController extends ChangeNotifier {
           );
       await support.create(recursive: true);
       store = Store(p.join(support.path, 'swiftdrop.sqlite'));
+      github = GitHubController(secrets, store);
+      await github.initialize();
       name = store.setting('name') ?? name;
       if (name.length > 100) name = name.substring(0, 100);
       theme = store.setting('theme') ?? 'system';
@@ -328,6 +332,7 @@ class AppController extends ChangeNotifier {
     }
     selection = combined;
     selectedSizes = sizes;
+    github.invalidate();
     notifyListeners();
   }
 
@@ -344,6 +349,7 @@ class AppController extends ChangeNotifier {
   void clearSelection() {
     selection = [];
     selectedSizes = {};
+    github.invalidate();
     notifyListeners();
   }
 
@@ -439,6 +445,7 @@ class AppController extends ChangeNotifier {
   Future<void> close() async {
     _networkTimer?.cancel();
     if (ready) {
+      github.dispose();
       sender.cancel();
       await disableSharing();
       store.close();

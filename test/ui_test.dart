@@ -32,6 +32,15 @@ void main() {
       await tester.pumpWidget(SwiftDropApp(controller: controller));
       await tester.pumpAndSettle();
       expect(find.text('Your files. Without the cloud.'), findsOneWidget);
+      await tester.ensureVisible(find.text('Push files to GitHub'));
+      await tester.tap(find.text('Push files to GitHub'));
+      await tester.pumpAndSettle();
+      expect(find.text('Personal access token'), findsOneWidget);
+      expect(find.text('Existing branch'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.text('Home').last);
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Choose files to send'));
       await tester.tap(find.text('Choose files to send'));
       await tester.pumpAndSettle();
       expect(find.text('Send something great.'), findsOneWidget);

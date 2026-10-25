@@ -8,6 +8,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../features/github/github_screen.dart';
 import '../features/transfer/sender.dart';
 import 'controller.dart';
 
@@ -90,6 +91,7 @@ class _SwiftDropShellState extends State<SwiftDropShell>
     'History',
     'Settings',
     'Connection help',
+    'Push to GitHub',
   ];
   static const icons = [
     Icons.grid_view_rounded,
@@ -101,6 +103,7 @@ class _SwiftDropShellState extends State<SwiftDropShell>
     Icons.history_rounded,
     Icons.tune_rounded,
     Icons.help_outline_rounded,
+    Icons.cloud_upload_outlined,
   ];
   @override
   void initState() {
@@ -338,6 +341,7 @@ class _SwiftDropShellState extends State<SwiftDropShell>
                       : DropTarget(
                           enable:
                               !c.busy &&
+                              !c.github.busy &&
                               (Platform.isWindows ||
                                   Platform.isLinux ||
                                   Platform.isMacOS),
@@ -346,7 +350,7 @@ class _SwiftDropShellState extends State<SwiftDropShell>
                           onDragDone: (details) {
                             setState(() {
                               dragging = false;
-                              page = 1;
+                              if (page != 9) page = 1;
                             });
                             unawaited(
                               c.guard(
@@ -402,6 +406,7 @@ class _SwiftDropShellState extends State<SwiftDropShell>
     5 => transfers(),
     6 => history(),
     7 => settings(),
+    9 => GitHubScreen(app: c),
     _ => help(),
   };
 
@@ -512,11 +517,17 @@ class _SwiftDropShellState extends State<SwiftDropShell>
             SizedBox(width: 16),
             Expanded(
               child: Text(
-                'Direct TLS connections • Certificate-pinned pairing • No accounts\nKeep mobile sessions in the foreground while sharing.',
+                'Direct TLS connections • Certificate-pinned pairing\nNo accounts for nearby sharing. Keep mobile sessions in the foreground.',
               ),
             ),
           ],
         ),
+      ),
+      const SizedBox(height: 16),
+      OutlinedButton.icon(
+        onPressed: () => navigate(9),
+        icon: const Icon(Icons.cloud_upload_outlined),
+        label: const Text('Push files to GitHub'),
       ),
       if (c.progress != null) ...[
         const SizedBox(height: 24),
