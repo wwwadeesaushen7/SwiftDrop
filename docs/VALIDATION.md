@@ -4,10 +4,10 @@ This is an initial development implementation, not a production-certified cross-
 
 ## GitHub upload update — 0.2.0 (2026-10-25)
 
-- Added **Push to GitHub** with repository/branch/folder selection, fine-grained personal access tokens, optional OS vault persistence/forget, explicit review and replacement approval, bounded streamed binary uploads, cancellation, Git object verification and one non-force branch update per batch.
+- Added **Push to GitHub** with repository/branch/folder selection, fine-grained personal access tokens, optional OS vault persistence/forget, explicit review and replacement approval, bounded streamed binary uploads, cancellation, Git object verification and one non-force branch update per batch. Repository tree metadata caches are bounded to four directories.
 - `flutter analyze`: **no issues**. All **39 tests pass** (27 existing + 12 GitHub tests); responsive widget checks now also open the GitHub screen at 390×844 and 1280×800.
 - GitHub tests use real loopback HTTP sockets and file streams against an API fixture. **Live GitHub account uploads are unrun:** this environment blocks `api.github.com`. No user token was requested or used for these tests.
-- Android debug APK **0.2.0+2** built successfully in 34.8 seconds. Size **203,629,234 bytes**; APK signature v2 and ZIP CRC checks passed. Minimum Android SDK 29, target/compile 36. SHA-256: `01068985aa79bda507be269c6c17aceb7324b7dbbb9e12ab7e27b93dd2be4c6e`.
+- Android debug APK **0.2.0+2** built successfully; final incremental rebuild passed in 10.4 seconds. Size **229,345,457 bytes**; APK signature v2 and ZIP CRC checks passed. Minimum Android SDK 29, target/compile 36. SHA-256: `1edd9cce668208b94031bfcbe738d25e776936fe1625115195714f42e4a07baa`.
 - This is a debug-signed development APK, not a production-signed release. Physical Android use, real OS token persistence and Windows compilation/runtime remain unrun. Windows Inno Setup version updated to 0.2.0.
 - GitHub uploads require internet, an initialized existing repository and an existing writable branch. Limit 100 MiB per file / 200 files per batch; Git LFS, repository/branch creation and interrupted GitHub upload resume are not implemented. See [instructions and manual checks](GITHUB_UPLOAD.md).
 

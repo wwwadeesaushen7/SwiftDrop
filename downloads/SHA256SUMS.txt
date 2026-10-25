@@ -1,4 +1,4 @@
-01068985aa79bda507be269c6c17aceb7324b7dbbb9e12ab7e27b93dd2be4c6e  SwiftDrop-0.2.0-android-debug.apk
+1edd9cce668208b94031bfcbe738d25e776936fe1625115195714f42e4a07baa  SwiftDrop-0.2.0-android-debug.apk
 aa1cc2cfd12b773bf1e1df60cdd5288d61b25a68ff786ca6dfa1932e713fed9b  SwiftDrop-0.1.0-android-debug.apk
 d1580e15eac2104c219a09f41b40ea34dc14c4543c7d8f0dea6336eaf8c9a92d  SwiftDrop-0.1.0-android-debug.zip
 397da290ac78209cf9ac85818d2919338e142c91bd981436a350962d4aadf7dd  SwiftDrop-source.zip

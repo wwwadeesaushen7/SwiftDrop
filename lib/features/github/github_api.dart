@@ -317,6 +317,9 @@ class GitHubApi {
             'Directory is too large to review safely. Choose a different destination.',
           );
         }
+        // Large repositories can have many large sibling trees. Bound cached
+        // metadata as well as file payload buffers during review.
+        if (trees.length >= 4) trees.remove(trees.keys.first);
         trees[sha] = data['tree'] as List;
       }
       return trees[sha]!;
