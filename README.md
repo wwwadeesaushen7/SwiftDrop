@@ -2,7 +2,7 @@
 
 **[Download the Android APK directly — no ZIP extraction](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.2.0-android-debug.apk)** · **[Mobile/PC usage and file guide](docs/FILE_GUIDE.md)** · **[Every file: purpose and individual download](downloads/FILES.md)**.
 
-The APK is a 203.6 MB debug test build for Android 10+. All source files are also available individually in this repository; use Git and Git LFS to download the full project as normal files.
+The APK is a 229.3 MB debug test build for Android 10+. All source files are also available individually in this repository; use Git and Git LFS to download the full project as normal files.
 
 Private local file sharing in Flutter/Dart, with Android and Windows as the first targets.
 Nearby sharing needs no cloud storage or account. Devices must be able to reach each other on a trusted LAN/hotspot. Optional **Push to GitHub** uploads need internet and your own GitHub repository/token.

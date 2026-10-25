@@ -4,7 +4,7 @@
 
 **[Download SwiftDrop-0.2.0-android-debug.apk](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.2.0-android-debug.apk)**
 
-- Size: **229,345,457 bytes** (about **203.6 MB**).
+- Size: **229,345,457 bytes** (about **229.3 MB**).
 - Android **10 or newer**. Debug-signed test build.
 - Open the downloaded `.apk` on Android to install it. GitHub may show a Git LFS notice: use **Download** / **Download raw file**.
 - APK SHA-256: `1edd9cce668208b94031bfcbe738d25e776936fe1625115195714f42e4a07baa`.

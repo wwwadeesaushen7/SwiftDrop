@@ -6,7 +6,7 @@ The folders in your screenshot contain the developer project. GitHub stores the 
 
 | What you want | What to get |
 | --- | --- |
-| Use SwiftDrop on an Android phone | [Download the APK directly](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.2.0-android-debug.apk). About **203.6 MB**, Android **10+**, debug test build. No outer ZIP or extraction step. |
+| Use SwiftDrop on an Android phone | [Download the APK directly](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.2.0-android-debug.apk). About **229.3 MB**, Android **10+**, debug test build. No outer ZIP or extraction step. |
 | Read or edit the source | The normal files in this repository, especially `lib/`. |
 | Download the whole project as individual files on Windows | Clone with Git and Git LFS using the commands below. Git creates the folder tree for you. |
 | Use SwiftDrop on a Windows PC | Build the Windows app from the full project. No verified ready-made Windows installer is provided here. |
@@ -18,7 +18,7 @@ The folders in your screenshot contain the developer project. GitHub stores the 
 2. Tap the **downloads** folder shown in your screenshot.
 3. Tap **SwiftDrop-0.2.0-android-debug.apk**. This is the new direct installer, without `.zip` at the end.
 4. Use GitHub's **Download** / **Download raw file** button (a downward arrow; it can be inside the three-dot menu on a narrow screen). GitHub may show a **Git LFS** notice because this is a large file; choose its Download button. You can also use the direct APK link above.
-5. Once the approximately 203.6 MB download finishes, open Android's **Files → Downloads** and tap the APK.
+5. Once the approximately 229.3 MB download finishes, open Android's **Files → Downloads** and tap the APK.
 6. If Android requests it, allow installation from the browser or Files app you are using, then tap **Install → Open**.
 
 The `.dart`, `.yaml`, `.cpp` and `.kt` files are source/build files. You use the APK to install the Android app. On iPhone, APK installation is unavailable.
@@ -56,7 +56,7 @@ git pull
 git lfs pull
 ```
 
-The APK should be about 203.6 MB. If you instead get a tiny text file beginning `version https://git-lfs.github.com/spec/v1`, it is a Git LFS pointer: run `git lfs pull`, or use GitHub's Download button for the actual APK.
+The APK should be about 229.3 MB. If you instead get a tiny text file beginning `version https://git-lfs.github.com/spec/v1`, it is a Git LFS pointer: run `git lfs pull`, or use GitHub's Download button for the actual APK.
 
 The earlier ZIP downloads remain for existing links, but they are optional. The normal source tree and the new `.apk` are the uncompressed-file route.
 
