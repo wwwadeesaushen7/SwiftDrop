@@ -5,6 +5,8 @@
 AppId={{C0CB0348-38C5-4513-96D6-271C878AF1CB}
 AppName=SwiftDrop
 AppVersion={#AppVersion}
+VersionInfoVersion={#AppVersion}
+VersionInfoProductVersion={#AppVersion}
 AppPublisher=SwiftDrop
 DefaultDirName={localappdata}\Programs\SwiftDrop
 DefaultGroupName=SwiftDrop
