@@ -1,5 +1,7 @@
 # SwiftDrop
 
+**[Windows PC installer and version-checked build status](downloads/WINDOWS.md)** — expected current version **0.3.0**. A successful Windows build publishes the setup EXE directly; pending/failed builds are shown explicitly.
+
 **[Download the Android APK directly — no ZIP extraction](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.3.0-android-debug.apk)** · **[Mobile/PC usage and file guide](docs/FILE_GUIDE.md)** · **[Every file: purpose and individual download](downloads/FILES.md)**.
 
 The APK is a 229.4 MB debug test build for Android 10+. All source files are also available individually in this repository; use Git and Git LFS to download the full project as normal files.
@@ -97,8 +99,8 @@ The manifest declares Internet, network state, multicast and camera access, plus
 
 ```powershell
 flutter build windows --release
-# Requires Inno Setup 6 installed separately:
-& "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" packaging\swiftdrop.iss
+# Requires Inno Setup 6 installed separately. Checks the actual EXE version:
+.\tool\package-windows.ps1
 ```
 
 Installer: `build/installer/SwiftDrop-0.3.0-windows-x64-setup.exe`. It installs per user without silently changing firewall rules. Ship the entire Flutter release directory, never just the executable. Provision the Microsoft Visual C++ 2015–2022 x64 Redistributable on target systems. Code-sign both app and installer with your organization certificate before distribution. Store signing credentials outside the repository. Packaging version currently follows `0.3.0`; update the Inno version together with `pubspec.yaml` for releases.

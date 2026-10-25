@@ -11,3 +11,5 @@ android/key.properties
 *.keystore
 *.iml
 .idea/
+__pycache__/
+*.pyc

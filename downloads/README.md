@@ -1,5 +1,9 @@
 # Download SwiftDrop directly
 
+## Windows PC
+
+**[Windows 0.3.0 download and verified build status](WINDOWS.md)**. The new Windows workflow checks the compiled app and installer version, then publishes a direct setup EXE here. Until it succeeds, the status page says pending or failed. Download the versioned artifact **SwiftDrop-0.3.0-Windows-installer-COMMIT** if using Actions. Close the older app before installing **SwiftDrop-0.3.0-windows-x64-setup.exe**. Flutter and the C++ development tools are not needed to install a built app.
+
 ## Android — no ZIP extraction
 
 **[Download SwiftDrop-0.3.0-android-debug.apk](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.3.0-android-debug.apk)**
@@ -28,7 +32,7 @@ cd SwiftDrop
 git lfs pull
 ```
 
-Use [the main build instructions](../README.md) to compile the Windows app. There is no verified ready-made Windows installer here. The `windows/` folder is its source/build integration; `packaging/swiftdrop.iss` is the installer recipe.
+Use [the Windows download status](WINDOWS.md) to get the checked installer, or [the main build instructions](../README.md) to compile it yourself. The `windows/` folder is source/build integration; `packaging/swiftdrop.iss` is the installer recipe.
 
 ## Earlier optional compressed packages
 

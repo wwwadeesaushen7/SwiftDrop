@@ -2,6 +2,14 @@
 
 This is an initial development implementation, not a production-certified cross-platform release. Checks below ran in the managed Linux environment. A built APK does not establish Android-to-Windows compatibility.
 
+## Windows installer version correction (2026-10-25)
+
+The user reported receiving an actual **0.2.0** Windows installer after being directed to a generic **SwiftDrop-Windows** Actions artifact. Earlier screenshots established a 0.2.0 Windows build; they did not establish a successful 0.3.0 build. The source and Inno recipe already declare 0.3.0.
+
+A separate **Windows installer (version checked)** workflow now reads the actual compiled EXE's four-part resource version, compares it with `pubspec.yaml`, checks the Inno recipe, packages, and checks the installer resource version. Artifact names contain the version and commit. A separate main-branch publisher verifies metadata, bytes and SHA-256 before committing the exact versioned EXE, checksums and build information into `downloads`. Pull requests cannot publish. Failed builds report failure rather than reusing an older installer. The previous unversioned Windows job is removed to avoid duplicate/confusing builds.
+
+Publisher tests cover matching output, corrupt data, older app/installer versions, wrong source commits/build numbers/filenames, and failure reporting. These tests validate publication contracts; the real Windows packaging/build result must be read from [the Windows status page](../downloads/WINDOWS.md), which starts as pending. Do not claim a compiled 0.3.0 Windows installer exists until that workflow succeeds.
+
 ## GitHub pull update — 0.3.0 (2026-10-25)
 
 - Added **GitHub files → Push files / Pull files**. Browse public repositories anonymously or private repositories with Contents read permission, navigate a pinned commit, select up to 200 files and choose a desktop destination. Downloads stream to unique batch directories, preserve existing local files, verify ordinary Git blob SHA-1 / LFS SHA-256, and discard incomplete batches on cancellation or errors. Android supports app-owned downloads with direct/History export to Downloads.

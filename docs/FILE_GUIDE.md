@@ -9,7 +9,7 @@ The folders in your screenshot contain the developer project. GitHub stores the 
 | Use SwiftDrop on an Android phone | [Download the APK directly](https://github.com/wwwadeesaushen7/SwiftDrop/raw/refs/heads/main/downloads/SwiftDrop-0.3.0-android-debug.apk). About **229.4 MB**, Android **10+**, debug test build. No outer ZIP or extraction step. |
 | Read or edit the source | The normal files in this repository, especially `lib/`. |
 | Download the whole project as individual files on Windows | Clone with Git and Git LFS using the commands below. Git creates the folder tree for you. |
-| Use SwiftDrop on a Windows PC | Build the Windows app from the full project. No verified ready-made Windows installer is provided here. |
+| Use SwiftDrop on a Windows PC | Open the [version-checked Windows download/status page](../downloads/WINDOWS.md). It links the direct installer after its build succeeds. |
 | Use SwiftDrop on an iPhone or Mac | These native targets are still unfinished; an iOS/macOS installer is not provided. |
 
 ## Android: use the files in your screenshot
@@ -37,6 +37,15 @@ This is a debug-signed development build. Installation and transfers on physical
 ## Upload your files to GitHub from the app
 
 SwiftDrop **0.3.0** includes **Home → GitHub: push / pull files**. Choose **Push files** to upload. Enter your repository, existing branch and a fine-grained token with Contents read/write access; choose files, review, then commit. Internet is required. Files are limited to 100 MiB each and 200 per commit. Choose **Pull files → Browse files** to select repository files and save them locally; public pulls need no token and private pulls need Contents read access. Git LFS downloads are supported. [Step-by-step GitHub instructions](GITHUB_UPLOAD.md).
+
+## Windows: install the current PC version
+
+1. Open the [Windows download and build status page](../downloads/WINDOWS.md). It will explicitly say pending/failed until the new workflow has successfully built and published the installer.
+2. Use its direct EXE download once available. The filename must be **SwiftDrop-0.3.0-windows-x64-setup.exe** for the current app.
+3. If using [GitHub Actions](https://github.com/wwwadeesaushen7/SwiftDrop/actions/workflows/windows-download.yml), choose **Windows installer (version checked)**, then the latest successful build. Download **SwiftDrop-0.3.0-Windows-installer-COMMIT**, extract it, and run the matching setup EXE. The artifact includes build metadata and a SHA-256 file.
+4. Close all older SwiftDrop windows before installation. Launch the updated app from Start; **GitHub files → Push files / Pull files** should be present.
+
+Installing a built app needs neither Flutter nor Visual Studio's C++ development workload. Source compilation below requires them. Older **SwiftDrop-Windows** artifacts can contain version 0.2.0; the generic artifact name alone does not identify the version. The current installer is unsigned, so Windows may report an unknown publisher. Publication/version checks are not a claim of physical-device transfer testing.
 
 ## Windows: download every source file without a ZIP
 
